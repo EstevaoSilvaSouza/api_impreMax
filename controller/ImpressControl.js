@@ -1,16 +1,35 @@
 const Impressora = require('../model/Impressora')
 
 const functiActive = {
-    Create: async function (model) {
+    CheckModel: function (model) {
+        if (!model.Nome
+            ||
+            !model.Marca
+            ||
+            !model.Modelo
+            ||
+            !model.Tecnico
+            ||
+            !model.Ip
+            ||
+            !model.Mac
+        ) {
+            return false
+        }
+        return true
+    },
+
+    async CreateImpre(model) {
         try {
             await Impressora.create(model);
-            return 'ok'
+            return true
         }
         catch (err) {
             console.log(err)
+            return false
         }
     },
-    Find: async function () {
+    async Find() {
         try {
             return await Impressora.find();
         }
@@ -18,14 +37,14 @@ const functiActive = {
             console.log(err)
         }
     },
-    FindId: async function (id) {
+    async FindId(id) {
         try {
             return await Impressora.findOne({ _id: id })
         } catch (e) {
             console.log(e)
         }
     },
-    UpdateImpres: async function (id, objModel) {
+    async UpdateImpres(id, objModel) {
         try {
             const checkId = await Impressora.findOne({ _id: id })
 
@@ -35,6 +54,15 @@ const functiActive = {
 
             await Impressora.updateOne({ _id: id }, objModel);
             return true
+
+        } catch (e) {
+            console.log(e)
+        }
+    },
+    async DeleteImpres(id) {
+        try {
+            const delet = await Impressora.deleteOne({ _id: id });
+            return delet ? true : false
 
         } catch (e) {
             console.log(e)
